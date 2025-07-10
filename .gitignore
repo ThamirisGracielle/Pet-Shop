@@ -1,0 +1,47 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VSCode
+.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Ambiente
+.env
+
+# Banco local e configs temporárias
+*.h2.db
+*.mv.db
+*.db
+*.sqlite
+
+# Arquivos de build
+*.class
+*.jar
+*.war
+
+# Credenciais do pgAdmin ou configs locais
+pgadmin4.db
+pgpass.conf
+.pgadmin/
+
+# Gerados pelo Spring
+.spring/
+
+# Test coverage
+coverage/
+jacoco.exec
