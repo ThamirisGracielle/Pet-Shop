@@ -16,6 +16,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<String> createClient(@RequestBody @Valid Client client) {
+        clientRepository.save(client);
         return ResponseEntity.ok("Cliente cadastrado!");
     }
 
