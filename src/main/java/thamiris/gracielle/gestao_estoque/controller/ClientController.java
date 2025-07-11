@@ -1,5 +1,6 @@
 package thamiris.gracielle.gestao_estoque.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thamiris.gracielle.gestao_estoque.model.Client;
@@ -14,7 +15,7 @@ public class ClientController {
     private ClientRepository clientRepository;
 
     @PostMapping
-    public ResponseEntity<String> createClient(@RequestBody Client client) {
+    public ResponseEntity<String> createClient(@RequestBody @Valid Client client) {
         return ResponseEntity.ok("Cliente cadastrado!");
     }
 
@@ -33,7 +34,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateClient(@PathVariable Long id, @RequestBody Client client) {
+    public ResponseEntity<String> updateClient(@PathVariable Long id, @RequestBody @Valid Client client) {
         clientRepository.findById(id)
                 .map(client1 -> {
                     client.setNome(client.getNome());
