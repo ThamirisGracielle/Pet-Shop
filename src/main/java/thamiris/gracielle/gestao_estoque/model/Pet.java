@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 public class Pet {
@@ -23,6 +25,9 @@ public class Pet {
 
     @NotBlank(message = "Raça é obrigatório")
     private String raca;
+
+    @NotBlank(message = "Data de nascimento é obrigatório")
+    private LocalDate idade;
 
     @NotBlank(message = "Nome do dono é obrigatório")
     private Client dono;
