@@ -1,10 +1,8 @@
 package thamiris.gracielle.gestao_estoque.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -26,10 +24,12 @@ public class Pet {
     @NotBlank(message = "Raça é obrigatório")
     private String raca;
 
-    @NotBlank(message = "Data de nascimento é obrigatório")
+    @NotNull(message = "Data de nascimento é obrigatório")
     private LocalDate idade;
 
-    @NotBlank(message = "Nome do dono é obrigatório")
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    @NotNull(message = "Dono é obrigatório")
     private Client dono;
 
 
