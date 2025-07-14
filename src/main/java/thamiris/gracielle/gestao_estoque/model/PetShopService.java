@@ -20,11 +20,22 @@ public class PetShopService {
     @NotBlank(message = "Nome é obrigatório")
     private String nome;
 
-    @NotNull(message = "Preço é obrigatório")
-    private double preco;
+    @Enumerated(EnumType.STRING)
+    private Especie especie;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
+
+    @Enumerated(EnumType.STRING)
+    private Porte porte;
+
+    @NotNull(message = "Preço é obrigatório")
+    private double preco;
+
+
 
 
 }
