@@ -20,10 +20,10 @@ public class PetShoServiceController {
     @PostMapping
     public ResponseEntity<String> createPetShopService (@RequestBody @Valid PetShopService petShopService){
         petShopServiceRepository.save(petShopService);
-        return ResponseEntity.ok().body("Serviço criado com sucesso");
+        return ResponseEntity.ok().body("Serviço criado com sucesso!");
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
     public List<PetShopService> listALL(){
         return petShopServiceRepository.findAll();
     }
