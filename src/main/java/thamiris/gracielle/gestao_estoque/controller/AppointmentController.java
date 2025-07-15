@@ -1,6 +1,7 @@
 package thamiris.gracielle.gestao_estoque.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,10 @@ import java.util.List;
 @RequestMapping("/agendamento")
 public class AppointmentController {
 
-
+    @Autowired
     private AppointmentRepository appointmentRepository;
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity<String> createAppointment(@RequestBody @Valid Appointment appointment) {
         appointmentRepository.save(appointment);
         return ResponseEntity.ok("Agendamento criado com sucesso!");
