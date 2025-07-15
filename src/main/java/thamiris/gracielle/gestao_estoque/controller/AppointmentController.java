@@ -32,7 +32,7 @@ public class AppointmentController {
         return appointmentRepository.findAll();
     }
 
-    @GetMapping("/{ID}")
+    @GetMapping("/{id}")
     public ResponseEntity<String> listById(@PathVariable Long id) {
         return appointmentRepository.findById(id)
                 .map(Appointment -> ResponseEntity.ok("Agendamento localizado"))
@@ -54,7 +54,7 @@ public class AppointmentController {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
-        List<Appointment> appointments = appointmentRepository.findByDate(startOfDay, endOfDay);
+        List<Appointment> appointments = appointmentRepository.findByDataHoraBetween(startOfDay, endOfDay);
 
         if (appointments.isEmpty()) {
             return ResponseEntity.notFound().build();
