@@ -1,6 +1,7 @@
 package thamiris.gracielle.gestao_estoque.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thamiris.gracielle.gestao_estoque.model.PetShopService;
@@ -9,9 +10,10 @@ import thamiris.gracielle.gestao_estoque.repository.PetShopServiceRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{PetShopService}")
+@RequestMapping("/servicos")
 public class PetShoServiceController {
 
+    @Autowired
     PetShopServiceRepository petShopServiceRepository;
 
 
@@ -45,7 +47,7 @@ public class PetShoServiceController {
         return  ResponseEntity.status(404).body("Serviço não encontrado!");
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public  ResponseEntity<String> deletePetShoService(@PathVariable Long id){
         return petShopServiceRepository.findById(id)
                 .map(petShopService -> { petShopServiceRepository.delete(petShopService );
