@@ -2,6 +2,7 @@ package thamiris.gracielle.gestao_estoque.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thamiris.gracielle.gestao_estoque.model.Client;
@@ -11,9 +12,10 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping
+@RequestMapping("/cliente")
 public class ClientController {
 
+    @Autowired
     private ClientRepository clientRepository;
 
     @PostMapping
