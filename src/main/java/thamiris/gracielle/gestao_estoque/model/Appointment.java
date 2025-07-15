@@ -29,7 +29,7 @@ public class Appointment {
 
     @NotNull(message = "Data e hora são obrigatórias")
     @Future(message = "A data e hora devem estar no futuro")
-    private LocalDateTime data_hora;
+    private LocalDateTime dataHora;
 
     @NotNull(message = "Status é obrigatório")
     @Enumerated(EnumType.STRING)
