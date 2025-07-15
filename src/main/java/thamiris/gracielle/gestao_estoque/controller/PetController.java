@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/pet")
 public class PetController {
 
+    @Autowired
     private PetRepository petRepository;
 
     @Autowired
@@ -25,7 +26,7 @@ public class PetController {
    @PostMapping
    public ResponseEntity<String> createPet (@RequestBody @Valid Pet pet){
        petRepository.save(pet);
-       return ResponseEntity.ok("Pet cadastrado com sucesso");
+       return ResponseEntity.ok("Pet cadastrado com sucesso!");
    }
 
     @GetMapping
