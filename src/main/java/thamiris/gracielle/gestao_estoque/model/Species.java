@@ -1,6 +1,6 @@
 package thamiris.gracielle.gestao_estoque.model;
 
-public enum Especie {
+public enum Species {
 
     GATO,
     CACHORRO,

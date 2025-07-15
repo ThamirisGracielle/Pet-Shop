@@ -21,16 +21,16 @@ public class PetShopService {
     private String nome;
 
     @Enumerated(EnumType.STRING)
-    private Especie especie;
+    private Species species;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    private Categoria categoria;
+    private Category category;
 
     @Enumerated(EnumType.STRING)
-    private Porte porte;
+    private Size size;
 
     @NotNull(message = "Preço é obrigatório")
     private double preco;

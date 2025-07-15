@@ -32,10 +32,10 @@ public class PetShoServiceController {
                 .map(petShopService1 ->{
 
                     petShopService.setNome(petShopService.getNome());
-                    petShopService.setEspecie(petShopService.getEspecie());
+                    petShopService.setSpecies(petShopService.getSpecies());
                     petShopService.setGender(petShopService.getGender());
-                    petShopService.setCategoria(petShopService.getCategoria());
-                    petShopService.setPorte(petShopService.getPorte());
+                    petShopService.setCategory(petShopService.getCategory());
+                    petShopService.setSize(petShopService.getSize());
                     petShopService.setPreco(petShopService.getPreco());
 
                     petShopServiceRepository.save(petShopService);

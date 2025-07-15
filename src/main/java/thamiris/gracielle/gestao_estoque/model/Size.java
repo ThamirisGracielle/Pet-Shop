@@ -1,6 +1,6 @@
 package thamiris.gracielle.gestao_estoque.model;
 
-public enum Porte {
+public enum Size {
 
     PEQUENO,
     MEDIO,

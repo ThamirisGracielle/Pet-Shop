@@ -1,6 +1,6 @@
 package thamiris.gracielle.gestao_estoque.model;
 
-public enum StatusAgendamento {
+public enum AppointmentStatus {
 
     AGENDADO,
     REALIZADO,

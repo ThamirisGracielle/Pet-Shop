@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class Agendamento {
+public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +33,5 @@ public class Agendamento {
 
     @NotNull(message = "Status é obrigatório")
     @Enumerated(EnumType.STRING)
-    private StatusAgendamento statusAgendamento = StatusAgendamento.AGENDADO;
+    private AppointmentStatus appointmentStatus = AppointmentStatus.AGENDADO;
 }
