@@ -1,5 +1,6 @@
 package thamiris.gracielle.gestao_estoque.config;
 
+import lombok.NoArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import thamiris.gracielle.gestao_estoque.model.*;
