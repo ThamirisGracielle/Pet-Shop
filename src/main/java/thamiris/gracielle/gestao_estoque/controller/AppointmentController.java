@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import thamiris.gracielle.gestao_estoque.DTO.AppointmentDTO;
+import thamiris.gracielle.gestao_estoque.Service.AppointmentService;
 import thamiris.gracielle.gestao_estoque.model.Appointment;
 import thamiris.gracielle.gestao_estoque.model.AppointmentStatus;
 import thamiris.gracielle.gestao_estoque.model.Pet;
@@ -22,10 +24,13 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    @Autowired
+    private AppointmentService appointmentService;
+
     @PostMapping
-    public ResponseEntity<String> createAppointment(@RequestBody @Valid Appointment appointment) {
-        appointmentRepository.save(appointment);
-        return ResponseEntity.ok("Agendamento criado com sucesso!");
+    public ResponseEntity<String> createAppointment(@RequestBody @Valid AppointmentDTO dto) {
+        Appointment created = appointmentService.createUpdateAppointmente(dto);
+        return ResponseEntity.ok("Agendamento criado com sucesso! ID: " + created.getId());
     }
 
     @GetMapping()
