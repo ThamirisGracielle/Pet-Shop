@@ -3,6 +3,7 @@ package thamiris.gracielle.gestao_estoque.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import thamiris.gracielle.gestao_estoque.DTO.AppointmentDTO;
+import thamiris.gracielle.gestao_estoque.DTO.UpdateStatusDTO;
 import thamiris.gracielle.gestao_estoque.model.*;
 import thamiris.gracielle.gestao_estoque.repository.AppointmentRepository;
 import thamiris.gracielle.gestao_estoque.repository.ClientRepository;
@@ -26,9 +27,9 @@ public class AppointmentService {
     @Autowired
     private PetShopServiceRepository serviceRepository;
 
-
-    public Appointment createUpdateAppointmente(AppointmentDTO dto){
-        if (dto.getDataHora() == null || dto.getDataHora().isBefore(LocalDateTime.now())){
+    // ✅ Método de criar/atualizar agendamento
+    public Appointment createUpdateAppointmente(AppointmentDTO dto) {
+        if (dto.getDataHora() == null || dto.getDataHora().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("A data ou hora do agendamento inválido!");
         }
 
@@ -41,8 +42,8 @@ public class AppointmentService {
         PetShopService service = serviceRepository.findById(dto.getServiceId())
                 .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
 
-        if(!pet.getDono().getId().equals(client.getId())){
-            throw new RuntimeException("O pete não pertence ao cliente");
+        if (!pet.getDono().getId().equals(client.getId())) {
+            throw new RuntimeException("O pet não pertence ao cliente");
         }
 
         Appointment appointment;
@@ -51,19 +52,34 @@ public class AppointmentService {
             appointment = appointmentRepository.findById(dto.getAppointmentId())
                     .orElseThrow(() -> new RuntimeException("Agendamento não encontrado com ID: "
                             + dto.getAppointmentId()));
-        }
-        else {
+        } else {
             appointment = new Appointment();
         }
+
         appointment.setClient(client);
         appointment.setPet(pet);
         appointment.setPetShopService(service);
         appointment.setDataHora(dto.getDataHora());
+
         try {
             AppointmentStatus status = AppointmentStatus.valueOf(dto.getAppointmentStatus());
             appointment.setAppointmentStatus(status);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Status de agendamento inválido!");
+        }
+
+        return appointmentRepository.save(appointment);
+    }
+
+    public Appointment updateStatus(Long id, UpdateStatusDTO dto) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        try {
+            AppointmentStatus status = AppointmentStatus.valueOf(dto.getStatus());
+            appointment.setAppointmentStatus(status);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Status inválido: " + dto.getStatus());
         }
 
         return appointmentRepository.save(appointment);
