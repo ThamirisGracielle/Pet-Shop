@@ -7,6 +7,7 @@ import lombok.Data;
 public class UpdateStatusDTO {
 
 
+
     private String status;
 
 }
