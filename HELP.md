@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'thamiris.gracielle.gestao-estoque' is invalid and this project uses 'thamiris.gracielle.gestao_estoque' instead.
+* The original package name 'thamiris.gracielle.gestao-estoque' is invalid and this project uses 'thamiris.gracielle.pet_shop' instead.
 
 # Getting Started
 
