@@ -8,11 +8,15 @@ import thamiris.gracielle.pet_shop.model.Appointment;
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
 
+    @Mapping(source = "id", target = "appointmentId")
     @Mapping(source = "client.id", target = "clientId")
     @Mapping(source = "pet.id", target = "petId")
+    @Mapping(source = "petShopService.id", target = "serviceId")
     AppointmentDTO toDTO(Appointment appointment);
 
+    @Mapping(source = "appointmentId", target = "id")
     @Mapping(source = "clientId", target = "client.id")
     @Mapping(source = "petId", target = "pet.id")
+    @Mapping(source = "serviceId", target = "petShopService.id")
     Appointment toEntity(AppointmentDTO appointmentDTO);
 }
