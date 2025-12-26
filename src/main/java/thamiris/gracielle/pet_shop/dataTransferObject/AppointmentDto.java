@@ -1,11 +1,11 @@
-package thamiris.gracielle.pet_shop.DTO;
+package thamiris.gracielle.pet_shop.dataTransferObject;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class AppointmentDTO {
+public class AppointmentDto {
 
     private Long AppointmentId;
     private Long clientId;

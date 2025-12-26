@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import thamiris.gracielle.pet_shop.model.enums.AppointmentStatus;
 
 import java.time.LocalDateTime;
 

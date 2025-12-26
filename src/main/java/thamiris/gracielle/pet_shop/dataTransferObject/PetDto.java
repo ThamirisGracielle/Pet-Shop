@@ -1,12 +1,12 @@
-package thamiris.gracielle.pet_shop.DTO;
+package thamiris.gracielle.pet_shop.dataTransferObject;
 
 import lombok.Data;
-import thamiris.gracielle.pet_shop.model.Species;
+import thamiris.gracielle.pet_shop.model.enums.Species;
 
 import java.time.LocalDate;
 
 @Data
-public class PetDTO {
+public class PetDto {
     private Long id;
     private String nome;
     private Species especie;

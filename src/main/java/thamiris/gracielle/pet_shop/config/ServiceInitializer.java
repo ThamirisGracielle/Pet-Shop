@@ -3,6 +3,10 @@ package thamiris.gracielle.pet_shop.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import thamiris.gracielle.pet_shop.model.*;
+import thamiris.gracielle.pet_shop.model.enums.Category;
+import thamiris.gracielle.pet_shop.model.enums.Gender;
+import thamiris.gracielle.pet_shop.model.enums.Size;
+import thamiris.gracielle.pet_shop.model.enums.Species;
 import thamiris.gracielle.pet_shop.repository.PetShopServiceRepository;
 
 import java.util.List;

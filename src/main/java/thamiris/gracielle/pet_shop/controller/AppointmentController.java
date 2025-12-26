@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import thamiris.gracielle.pet_shop.DTO.AppointmentDTO;
-import thamiris.gracielle.pet_shop.Service.AppointmentService;
+import thamiris.gracielle.pet_shop.dataTransferObject.AppointmentDto;
+import thamiris.gracielle.pet_shop.service.AppointmentService;
 import thamiris.gracielle.pet_shop.model.Appointment;
-import thamiris.gracielle.pet_shop.model.AppointmentStatus;
+import thamiris.gracielle.pet_shop.model.enums.AppointmentStatus;
 import thamiris.gracielle.pet_shop.repository.AppointmentRepository;
 
 import java.time.LocalDate;
@@ -27,7 +27,7 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @PostMapping
-    public ResponseEntity<String> createAppointment(@RequestBody @Valid AppointmentDTO dto) {
+    public ResponseEntity<String> createAppointment(@RequestBody @Valid AppointmentDto dto) {
         Appointment created = appointmentService.createUpdateAppointmente(dto);
         return ResponseEntity.ok("Agendamento criado com sucesso! ID: " + created.getId());
     }

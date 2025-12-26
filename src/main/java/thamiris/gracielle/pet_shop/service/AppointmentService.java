@@ -1,10 +1,11 @@
-package thamiris.gracielle.pet_shop.Service;
+package thamiris.gracielle.pet_shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import thamiris.gracielle.pet_shop.DTO.AppointmentDTO;
-import thamiris.gracielle.pet_shop.DTO.UpdateStatusDTO;
+import thamiris.gracielle.pet_shop.dataTransferObject.AppointmentDto;
+import thamiris.gracielle.pet_shop.dataTransferObject.UpdateStatusDto;
 import thamiris.gracielle.pet_shop.model.*;
+import thamiris.gracielle.pet_shop.model.enums.AppointmentStatus;
 import thamiris.gracielle.pet_shop.repository.AppointmentRepository;
 import thamiris.gracielle.pet_shop.repository.ClientRepository;
 import thamiris.gracielle.pet_shop.repository.PetRepository;
@@ -27,8 +28,7 @@ public class AppointmentService {
     @Autowired
     private PetShopServiceRepository serviceRepository;
 
-    // ✅ Método de criar/atualizar agendamento
-    public Appointment createUpdateAppointmente(AppointmentDTO dto) {
+    public Appointment createUpdateAppointmente(AppointmentDto dto) {
         if (dto.getDataHora() == null || dto.getDataHora().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("A data ou hora do agendamento inválido!");
         }
@@ -71,7 +71,7 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-    public Appointment updateStatus(Long id, UpdateStatusDTO dto) {
+    public Appointment updateStatus(Long id, UpdateStatusDto dto) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
 

@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import thamiris.gracielle.pet_shop.model.enums.Category;
+import thamiris.gracielle.pet_shop.model.enums.Gender;
+import thamiris.gracielle.pet_shop.model.enums.Size;
+import thamiris.gracielle.pet_shop.model.enums.Species;
 
 @Data
 @AllArgsConstructor
@@ -34,8 +38,5 @@ public class PetShopService {
 
     @NotNull(message = "Preço é obrigatório")
     private double preco;
-
-
-
 
 }

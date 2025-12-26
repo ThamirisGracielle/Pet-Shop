@@ -1,4 +1,4 @@
-package thamiris.gracielle.pet_shop.model;
+package thamiris.gracielle.pet_shop.model.enums;
 
 public enum Category {
 
