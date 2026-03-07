@@ -1,79 +1,94 @@
 package thamiris.gracielle.pet_shop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import thamiris.gracielle.pet_shop.model.Pet;
-import thamiris.gracielle.pet_shop.repository.ClientRepository;
-import thamiris.gracielle.pet_shop.repository.PetRepository;
+import thamiris.gracielle.pet_shop.dataTransferObject.PetDto;
+import thamiris.gracielle.pet_shop.service.PetService;
 
 import java.util.List;
 
+/**
+ * Controller responsável por gerenciar operações de pets
+ */
+@Tag(name = "Pets", description = "Endpoints para gerenciamento de pets")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/pet")
 public class PetController {
 
-    @Autowired
-    private PetRepository petRepository;
+    private final PetService petService;
 
-    @Autowired
-    private ClientRepository clientRepository;
+    /**
+     * Cadastra um novo pet
+     * @param dto Dados do pet
+     * @return Pet cadastrado
+     */
+    @Operation(summary = "Criar pet", description = "Cadastra um novo pet no sistema")
+    @PostMapping
+    public ResponseEntity<PetDto> createPet(@RequestBody @Valid PetDto dto) {
+        PetDto created = petService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
 
-   @PostMapping
-   public ResponseEntity<String> createPet (@RequestBody @Valid Pet pet){
-       petRepository.save(pet);
-       return ResponseEntity.ok("Pet cadastrado com sucesso!");
-   }
-
+    /**
+     * Lista todos os pets
+     * @return Lista de pets
+     */
+    @Operation(summary = "Listar pets", description = "Retorna todos os pets cadastrados")
     @GetMapping
-    public List<Pet> listAll(){
-        return petRepository.findAll();
+    public ResponseEntity<List<PetDto>> listAll() {
+        return ResponseEntity.ok(petService.findAll());
     }
 
+    /**
+     * Busca pet por ID
+     * @param id ID do pet
+     * @return Pet encontrado
+     */
+    @Operation(summary = "Buscar pet", description = "Busca um pet específico por ID")
     @GetMapping("/{id}")
-    public ResponseEntity listById(@PathVariable Long id){
-         return  petRepository.findById(id)
-                 .map(pet -> ResponseEntity.ok(pet))
-                 .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<PetDto> listById(@PathVariable Long id) {
+        return ResponseEntity.ok(petService.findById(id));
     }
 
+    /**
+     * Lista pets de um cliente específico
+     * @param id ID do cliente
+     * @return Lista de pets do cliente
+     */
+    @Operation(summary = "Listar pets por cliente", description = "Retorna todos os pets de um cliente específico")
     @GetMapping("/dono/{id}")
-    public ResponseEntity<List<Pet>> listByClient(@PathVariable Long id) {
-        return clientRepository.findById(id)
-                .map(client -> {
-                    List<Pet> pets = petRepository.findByDono(client);
-                    return ResponseEntity.ok(pets);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<PetDto>> listByClient(@PathVariable Long id) {
+        return ResponseEntity.ok(petService.findByClientId(id));
     }
 
-
+    /**
+     * Atualiza dados do pet
+     * @param id ID do pet
+     * @param dto Novos dados do pet
+     * @return Pet atualizado
+     */
+    @Operation(summary = "Atualizar pet", description = "Atualiza os dados de um pet existente")
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePet (@PathVariable Long id, @RequestBody @Valid Pet pet){
-       petRepository.findById(id)
-               .map(pet1 -> {
-                   pet.setNome(pet.getNome());
-                   pet.setEspecie(pet.getEspecie());
-                   pet.setRaca(pet.getRaca());
-                   pet.setIdade(pet.getIdade());
-                   pet.setDono(pet.getDono());
-
-                   petRepository.save(pet);
-                   return ResponseEntity.ok("Pet atualizado com sucesso");
-               });
-       return ResponseEntity.status(404).body("Pet nao encontrado");
+    public ResponseEntity<PetDto> updatePet(@PathVariable Long id, @RequestBody @Valid PetDto dto) {
+        PetDto updated = petService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
+    /**
+     * Remove um pet
+     * @param id ID do pet
+     * @return Resposta sem conteúdo
+     */
+    @Operation(summary = "Deletar pet", description = "Remove um pet do sistema")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePet (@PathVariable Long id){
-       return petRepository
-               .findById(id)
-               .map( pet -> { petRepository.delete(pet);
-                   return ResponseEntity.ok("Exclusão realizada com sucesso");
-               })
-               .orElseThrow(() -> new RuntimeException("Não foi possivel excluir"));
+    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
+        petService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
