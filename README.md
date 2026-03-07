@@ -86,14 +86,14 @@ cd pet-shop
 
 Crie um banco de dados PostgreSQL:
 ```sql
-CREATE DATABASE gestao_estoque;
+CREATE DATABASE pet_shop;
 ```
 
 ### 3. Configure as credenciais
 
 Edite o arquivo `src/main/resources/application.properties`:
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/gestao_estoque
+spring.datasource.url=jdbc:postgresql://localhost:5432/pet_shop
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 ```
@@ -236,10 +236,3 @@ O sistema implementa validações em:
 
 **Thamiris Gracielle**
 
-## 📄 Licença
-
-Este projeto está sob a licença MIT.
-
----
-
-⭐ Se este projeto foi útil para você, considere dar uma estrela!
