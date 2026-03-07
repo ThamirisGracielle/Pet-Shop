@@ -1,9 +1,11 @@
 package thamiris.gracielle.pet_shop.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import thamiris.gracielle.pet_shop.dataTransferObject.AppointmentDto;
 import thamiris.gracielle.pet_shop.dataTransferObject.UpdateStatusDto;
+import thamiris.gracielle.pet_shop.exception.BusinessException;
+import thamiris.gracielle.pet_shop.exception.ResourceNotFoundException;
 import thamiris.gracielle.pet_shop.model.*;
 import thamiris.gracielle.pet_shop.model.enums.AppointmentStatus;
 import thamiris.gracielle.pet_shop.repository.AppointmentRepository;
@@ -11,77 +13,84 @@ import thamiris.gracielle.pet_shop.repository.ClientRepository;
 import thamiris.gracielle.pet_shop.repository.PetRepository;
 import thamiris.gracielle.pet_shop.repository.PetShopServiceRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AppointmentService {
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final ClientRepository clientRepository;
+    private final PetRepository petRepository;
+    private final PetShopServiceRepository serviceRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private PetRepository petRepository;
-
-    @Autowired
-    private PetShopServiceRepository serviceRepository;
-
-    public Appointment createUpdateAppointmente(AppointmentDto dto) {
+    public Appointment create(AppointmentDto dto) {
         if (dto.getDataHora() == null || dto.getDataHora().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("A data ou hora do agendamento inválido!");
+            throw new BusinessException("A data ou hora do agendamento é inválida!");
         }
 
         Client client = clientRepository.findById(dto.getClientId())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + dto.getClientId()));
 
         Pet pet = petRepository.findById(dto.getPetId())
-                .orElseThrow(() -> new RuntimeException("Pet não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pet não encontrado com ID: " + dto.getPetId()));
 
         PetShopService service = serviceRepository.findById(dto.getServiceId())
-                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado com ID: " + dto.getServiceId()));
 
         if (!pet.getDono().getId().equals(client.getId())) {
-            throw new RuntimeException("O pet não pertence ao cliente");
+            throw new BusinessException("O pet não pertence ao cliente informado");
         }
 
-        Appointment appointment;
-
-        if (dto.getAppointmentId() != null) {
-            appointment = appointmentRepository.findById(dto.getAppointmentId())
-                    .orElseThrow(() -> new RuntimeException("Agendamento não encontrado com ID: "
-                            + dto.getAppointmentId()));
-        } else {
-            appointment = new Appointment();
-        }
-
+        Appointment appointment = new Appointment();
         appointment.setClient(client);
         appointment.setPet(pet);
         appointment.setPetShopService(service);
         appointment.setDataHora(dto.getDataHora());
-
-        try {
-            AppointmentStatus status = AppointmentStatus.valueOf(dto.getAppointmentStatus());
-            appointment.setAppointmentStatus(status);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Status de agendamento inválido!");
-        }
+        appointment.setAppointmentStatus(AppointmentStatus.AGENDADO);
 
         return appointmentRepository.save(appointment);
     }
 
-    public Appointment updateStatus(Long id, UpdateStatusDto dto) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+    public List<Appointment> findAll() {
+        return appointmentRepository.findAll();
+    }
 
-        try {
-            AppointmentStatus status = AppointmentStatus.valueOf(dto.getStatus());
-            appointment.setAppointmentStatus(status);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Status inválido: " + dto.getStatus());
+    public Appointment findById(Long id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado com ID: " + id));
+    }
+
+    public List<Appointment> findByPetId(Long petId) {
+        return appointmentRepository.findByPetId(petId);
+    }
+
+    public List<Appointment> findByDate(LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+        return appointmentRepository.findByDataHoraBetween(startOfDay, endOfDay);
+    }
+
+    public Appointment cancelAppointment(Long id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado com ID: " + id));
+
+        if (appointment.getAppointmentStatus() == AppointmentStatus.CANCELADO) {
+            throw new BusinessException("Agendamento já está cancelado");
         }
 
+        appointment.setAppointmentStatus(AppointmentStatus.CANCELADO);
+        return appointmentRepository.save(appointment);
+    }
+
+    public Appointment updateStatus(Long id, AppointmentStatus status) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado com ID: " + id));
+
+        appointment.setAppointmentStatus(status);
         return appointmentRepository.save(appointment);
     }
 }
