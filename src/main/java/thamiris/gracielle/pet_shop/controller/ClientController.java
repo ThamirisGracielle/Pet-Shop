@@ -1,64 +1,83 @@
 package thamiris.gracielle.pet_shop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import thamiris.gracielle.pet_shop.model.Client;
-import thamiris.gracielle.pet_shop.repository.ClientRepository;
+import thamiris.gracielle.pet_shop.dataTransferObject.ClientDto;
+import thamiris.gracielle.pet_shop.service.ClientService;
 
 import java.util.List;
 
+/**
+ * Controller responsável por gerenciar operações de clientes
+ */
+@Tag(name = "Clientes", description = "Endpoints para gerenciamento de clientes")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cliente")
 public class ClientController {
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientService clientService;
 
+    /**
+     * Cadastra um novo cliente
+     * @param dto Dados do cliente
+     * @return Cliente cadastrado
+     */
+    @Operation(summary = "Criar cliente", description = "Cadastra um novo cliente no sistema")
     @PostMapping
-    public ResponseEntity<String> createClient(@RequestBody @Valid Client client) {
-        clientRepository.save(client);
-        return ResponseEntity.ok("Cliente cadastrado!");
+    public ResponseEntity<ClientDto> createClient(@RequestBody @Valid ClientDto dto) {
+        ClientDto created = clientService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-
+    /**
+     * Lista todos os clientes
+     * @return Lista de clientes
+     */
+    @Operation(summary = "Listar clientes", description = "Retorna todos os clientes cadastrados")
     @GetMapping
-    public List<Client> listAll() {
-        return clientRepository.findAll();
-
+    public ResponseEntity<List<ClientDto>> listAll() {
+        return ResponseEntity.ok(clientService.findAll());
     }
 
+    /**
+     * Busca cliente por ID
+     * @param id ID do cliente
+     * @return Cliente encontrado
+     */
+    @Operation(summary = "Buscar cliente", description = "Busca um cliente específico por ID")
     @GetMapping("/{id}")
-    public ResponseEntity listById(@PathVariable Long id) {
-        return clientRepository.findById(id)
-                .map(client -> ResponseEntity.ok(client))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ClientDto> listById(@PathVariable Long id) {
+        return ResponseEntity.ok(clientService.findById(id));
     }
 
+    /**
+     * Atualiza dados do cliente
+     * @param id ID do cliente
+     * @param dto Novos dados do cliente
+     * @return Cliente atualizado
+     */
+    @Operation(summary = "Atualizar cliente", description = "Atualiza os dados de um cliente existente")
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateClient(@PathVariable Long id, @RequestBody @Valid Client client) {
-        clientRepository.findById(id)
-                .map(client1 -> {
-                    client.setNome(client.getNome());
-                    client.setTelefone(client.getTelefone());
-                    client.setEmail(client.getEmail());
-
-                    clientRepository.save(client);
-                    return ResponseEntity.ok("Cliente atualizado com sucesso");
-                });
-        return ResponseEntity.status(404).body("Cliente não encontrado");
+    public ResponseEntity<ClientDto> updateClient(@PathVariable Long id, @RequestBody @Valid ClientDto dto) {
+        ClientDto updated = clientService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
+    /**
+     * Remove um cliente
+     * @param id ID do cliente
+     * @return Resposta sem conteúdo
+     */
+    @Operation(summary = "Deletar cliente", description = "Remove um cliente do sistema")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClient(@PathVariable Long id){
-            return clientRepository
-                    .findById(id)
-                    .map(client -> { clientRepository.delete(client);
-                        return ResponseEntity.ok("Exclusao realizada com sucesso");
-                    })
-                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
+        clientService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
